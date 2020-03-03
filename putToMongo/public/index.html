@@ -1,0 +1,23 @@
+<html>
+<head>
+<script src='asyncReq.js'></script>
+<script>
+function sendDataToServer()
+{
+	var url = "./setValue?v=" + document.getElementById("slider").value;
+	var callback = function(data){
+		return;
+	}
+	loadFile(url, callback);
+}
+
+
+</script>
+</head>
+
+<body>
+	<h1> Internet Remote</h1>
+	<input type='range' min=1 max=1023 id='slider'>
+	<button onclick='sendDataToServer()'> Submit </button>
+</body>
+</html>
