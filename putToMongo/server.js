@@ -13,9 +13,19 @@ app.get("/", function (req, res) {
     res.redirect("/index.html");
 });
 
+app.get("/getValue", function (req, res) {
+  db.collection("data").find({}).toArray(function(e,v){
+    res.send(JSON.stringify(v));
+  });
+});
+
 app.get("/setValue", function (req, res) {
-  console.log(decodeURIComponent(req.query.v));
-  var v = JSON.parse(decodeURIComponent(req.query.v));
+  var t = decodeURIComponent(req.query.v).split(",");
+	console.log(t);
+	var v = {
+	  ta1: t[0],
+	  tg1: t[1]
+	}
   v.time = new Date().getTime();
   db.collection("data").insert(v, function(e,r){
     res.send(v.toString());
@@ -29,3 +39,5 @@ app.use(errorHandler());
 
 console.log("Simple static server listening at http://" + hostname + ":" + port);
 app.listen(port);
+
+
