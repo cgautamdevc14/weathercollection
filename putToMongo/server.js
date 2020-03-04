@@ -23,8 +23,9 @@ app.get("/setValue", function (req, res) {
   var t = decodeURIComponent(req.query.v).split(",");
 	console.log(t);
 	var v = {
-	  ta1: t[0],
-	  tg1: t[1]
+	  id: t[0],
+	  ta1: t[1],
+	  tg1: t[2]
 	}
   v.time = new Date().getTime();
   db.collection("data").insert(v, function(e,r){
