@@ -12,7 +12,7 @@ function getXMLHTTPRequest()
         }
     }
 
-    // If the previous didn't work, lets check if the browser natively support XMLHttpRequest 
+    // If the previous didn't work, lets check if the browser natively support XMLHttpRequest
     if(!request && typeof XMLHttpRequest != "undefined"){
         //The browser does, so lets instantiate the object
         request = new XMLHttpRequest();
@@ -30,14 +30,14 @@ function loadFile(filename, callback)
     if (aXMLHttpRequest)
     {
         aXMLHttpRequest.open("GET", filename, true);
-        
+
       aXMLHttpRequest.onreadystatechange = function (aEvt) {
         if(aXMLHttpRequest.readyState == 4){
         allData = aXMLHttpRequest.responseText;
         callback(allData)
         }
       };
-      
+
       //Lets fire off the request
         aXMLHttpRequest.send(null);
     }
@@ -47,4 +47,3 @@ function loadFile(filename, callback)
         alert("A problem occurred instantiating the XMLHttpRequest object.");
     }
 }
-

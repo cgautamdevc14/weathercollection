@@ -2,11 +2,24 @@
 <head>
 <script src='asyncReq.js'></script>
 <script>
-function sendDataToServer()
+function getDataFromServer()
 {
-	var url = "./setValue?v=" + document.getElementById("slider").value;
+	var url = "./getValue"
 	var callback = function(data){
-		return;
+		console.log(data, typeof data);
+		var args = data.split(" ");
+		console.log(args);
+		var t = args[0];
+		var h = args[1];
+		var time = args[2];
+
+		var output =
+		"<h2> Temperature </h2> <p>" + t + " &deg; F</p>"+
+		"<h2> Humidity </h2> <p>" + h + " %</p>"+
+		"<p> at " + new Date(parseInt(time)).toString() + "</p>";
+
+		document.getElementById("data").innerHTML = output;
+
 	}
 	loadFile(url, callback);
 }
@@ -15,9 +28,9 @@ function sendDataToServer()
 </script>
 </head>
 
-<body>
-	<h1> Internet Remote</h1>
-	<input type='range' min=1 max=1023 id='slider'>
-	<button onclick='sendDataToServer()'> Submit </button>
+<body style='text-align:center; font-family:Helvetica' onload='setInterval("getDataFromServer()", 1000)'>
+	<h1> Weather </h1>
+	<div id='data'></div>
+
 </body>
 </html>
