@@ -30,7 +30,8 @@ app.get("/getAverage", function (req, res) {
 });
 
 app.get("/getLatest", function (req, res) {
-  db.collection("data").find({}).sort({time:-1}).limit(10).toArray(function(err, result){
+  var id = req.query.id;
+  db.collection("data").find({id:id}).sort({time:-1}).limit(10).toArray(function(err, result){
     res.send(JSON.stringify(result));
   });
 });
@@ -38,26 +39,24 @@ app.get("/getLatest", function (req, res) {
 app.get("/getData", function (req, res) {
   var from = parseInt(req.query.from);
   var to = parseInt(req.query.to);
-  db.collection("data").find({time:{$gt:from, $lt:to}}).sort({time:-1}).toArray(function(err, result){
+  var id = req.query.id;
+  db.collection("data").find({id:id, time:{$gt:from, $lt:to}}).sort({time:-1}).toArray(function(err, result){
     res.send(JSON.stringify(result));
   });
 });
 
 
 app.get("/getValue", function (req, res) {
-  //res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.send(VALUEt.toString() + " " + VALUEh + " " + VALUEtime + "\r");
+  var id = req.query.id;
+  var now = new Date().getTime();
+  db.collection("data").find({id:id}).sort({time:-1}).limit(1).toArray(function(err, result){
+    res.send(JSON.stringify(result));
+  });
 });
 
 
 app.get("/", function (req, res) {
     res.redirect("/index.html");
-});
-
-app.get("/getValue", function (req, res) {
-  db.collection("data").find({}).toArray(function(e,v){
-    res.send(JSON.stringify(v));
-  });
 });
 
 app.get("/setValue", function (req, res) {

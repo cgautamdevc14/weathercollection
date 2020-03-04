@@ -10,16 +10,16 @@ var chart;
 var lastAddedTS = 0;
 function getDataFromServer()
 {
-	var url = "./getLatest"
+	var url = "./getLatest?id=" + window.location.hash.replace("#","");
 	var callback = function(data){
 		var obj = JSON.parse(data);
-		var columns = [["x"],["Temperature"],["Humidity"]]
+		var columns = [["x"],["Temperature (atm)"],["Temperature (globe)"]]
 		for(var i = 0; i < obj.length; i++){
 			var timestamp = parseInt(obj[i].ts || obj[i].time);
 			if(timestamp > lastAddedTS){
 				columns[0].push(getTSInFormat(timestamp));
-				columns[1].push(parseFloat(obj[i].t || 0));
-				columns[2].push(parseFloat(obj[i].h || 0));
+				columns[1].push(parseFloat(obj[i].ta1 || 0));
+				columns[2].push(parseFloat(obj[i].tg1 || 0));
 				lastAddedTS = timestamp;
 			}
 		}
@@ -36,17 +36,17 @@ function getTSInFormat(t)
 	return x.getFullYear() + "-" + x.getMonth() + "-" + x.getDate() + "T" + x.getHours() + ":" + x.getMinutes() + ":" + x.getSeconds();
 }
 function start(){
-	var url = "./getLatest";
+	var url = "./getLatest?id=" + window.location.hash.replace("#","");
 	var callback = function(data){
 		var obj = JSON.parse(data);
-		var columns = [["x"],["Temperature"],["Humidity"]]
+		var columns = [["x"],["Temperature (atm)"],["Temperature (globe)"]]
 		for(var i = 0; i < obj.length; i++){
 			var timestamp = parseInt(obj[i].ts || obj[i].time);
       console.log(obj[i].ts);
       console.log(timestamp);
 			columns[0].push(getTSInFormat(timestamp));
-				columns[1].push(parseFloat(obj[i].t || 0));
-				columns[2].push(parseFloat(obj[i].h || 0));
+				columns[1].push(parseFloat(obj[i].ta1 || 0));
+				columns[2].push(parseFloat(obj[i].tg1 || 0));
 			lastAddedTS = timestamp;
 		}
 		chart = c3.generate({

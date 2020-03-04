@@ -4,18 +4,17 @@
 <script>
 function getDataFromServer()
 {
-	var url = "./getValue"
+	var url = "./getValue?id=" + window.location.hash.replace("#","")
 	var callback = function(data){
 		console.log(data, typeof data);
-		var args = data.split(" ");
-		console.log(args);
-		var t = args[0];
-		var h = args[1];
-		var time = args[2];
+		var obj = JSON.parse(data);
+		var t = obj[0].ta1;
+		var h = obj[0].tg1;
+		var time = obj[0].time;
 
 		var output =
-		"<h2> Temperature </h2> <p>" + t + " &deg; F</p>"+
-		"<h2> Humidity </h2> <p>" + h + " %</p>"+
+		"<h2> Temperature (atm)</h2> <p>" + t + " &deg; F</p>"+
+		"<h2> Temperature (globe)</h2> <p>" + h + " &deg; F</p>"+
 		"<p> at " + new Date(parseInt(time)).toString() + "</p>";
 
 		document.getElementById("data").innerHTML = output;
