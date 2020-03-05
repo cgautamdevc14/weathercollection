@@ -40,6 +40,7 @@ app.get("/getData", function (req, res) {
   var from = parseInt(req.query.from);
   var to = parseInt(req.query.to);
   var id = req.query.id;
+	console.log(from, to,id)
   db.collection("data").find({id:id, time:{$gt:from, $lt:to}}).sort({time:-1}).toArray(function(err, result){
     res.send(JSON.stringify(result));
   });
@@ -65,7 +66,9 @@ app.get("/setValue", function (req, res) {
 	var v = {
 	  id: t[0],
 	  ta1: t[1],
-	  tg1: t[2]
+	  tg1: t[2],
+	  t: t[3],
+	  h: t[4]
 	}
   v.time = new Date().getTime();
   db.collection("data").insert(v, function(e,r){
