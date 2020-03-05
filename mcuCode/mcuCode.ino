@@ -1,19 +1,35 @@
-/*
- *  This sketch sends data via HTTP GET requests to data.sparkfun.com service.
- *
- *  You need to get streamId and privateKey at data.sparkfun.com and paste them
- *  below. Or just customize this script to talk to other HTTP servers.
- *
- */
+
+#include <DallasTemperature.h>
+#include <OneWire.h>
+#include "DHT.h"
+#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+// DHT Sensor
+uint8_t DHTPin = D8;
+ 
+// Initialize DHT sensor.
+DHT dht(DHTPin, DHTTYPE);
+
+
+#define ONE_WIRE_BUS D4                          //D2 pin of nodemcu
+
+OneWire oneWire(ONE_WIRE_BUS);
+ 
+DallasTemperature sensors(&oneWire);            // Pass the oneWire reference to Dallas Temperature.
+
+
 
 #include <ESP8266WiFi.h>
 
-const char* ssid     = "admin";
-const char* password = "12345678";
+const char* ssid     = "NETGEAR31";
+const char* password = "fluffywind2904";
 
-const char* host = "52.12.175.72";
+const char* host = "54.184.128.170";
 
 void setup() {
+  pinMode(DHTPin, INPUT);
+
+dht.begin();
+
   Serial.begin(115200);
   delay(10);
 
@@ -35,11 +51,18 @@ void setup() {
   Serial.println("WiFi connected");  
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+     Serial.println(WiFi.macAddress());
+ 
+  sensors.begin();
 }
 
 int value = 0;
 
 void loop() {
+  
+    sensors.requestTemperatures();                // Send the command to get temperatures  
+  String s = WiFi.macAddress() + "," + String(sensors.getTempFByIndex(0)) +"," + String(sensors.getTempFByIndex(1)) + "," + String(1.8*(dht.readTemperature())+32) + "," + dht.readHumidity();
+  delay(500);
   delay(5000);
   ++value;
 
@@ -48,19 +71,15 @@ void loop() {
   
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
-  const int httpPort = 80;
+  const int httpPort = 8080;
   if (!client.connect(host, httpPort)) {
     Serial.println("connection failed");
     return;
   }
   
   // We now create a URI for the request
-  String url = "/input/";
-  url += streamId;
-  url += "?private_key=";
-  url += privateKey;
-  url += "&value=";
-  url += value;
+  String url = "/setValue?v=";
+  url += s;
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
