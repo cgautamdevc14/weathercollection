@@ -10,11 +10,15 @@ function getDataFromServer()
 		var obj = JSON.parse(data);
 		var t = obj[0].ta1;
 		var h = obj[0].tg1;
+		var h1 = obj[0].t;
+		var h2 = obj[0].h;
 		var time = obj[0].time;
 
 		var output =
 		"<h2> Temperature (atm)</h2> <p>" + t + " &deg; F</p>"+
 		"<h2> Temperature (globe)</h2> <p>" + h + " &deg; F</p>"+
+		"<h2> Temperature (other)</h2> <p>" + h1 + " &deg; F</p>"+
+		"<h2> Humidity </h2> <p>" + h2 + " %</p>"+
 		"<p> at " + new Date(parseInt(time)).toString() + "</p>";
 
 		document.getElementById("data").innerHTML = output;

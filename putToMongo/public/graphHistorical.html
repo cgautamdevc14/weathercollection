@@ -32,12 +32,14 @@ function getDataFromServer(){
 	var url = "./getData?from=" + from +"&to=" + to + "&id=" + window.location.hash.replace("#","");
 	var callback = function(data){
 		var obj = JSON.parse(data);
-		var columns = [["x"],["Temperature"],["Humidity"]]
+		var columns = [["x"],["Temperature (atm)"],["Temperature (globe)"], ["T"], ["H"]]
 		for(var i = 0; i < obj.length; i++){
 			var timestamp = parseInt(obj[i].ts || obj[i].time);
 			columns[0].push(getTSInFormat(timestamp));
 			columns[1].push(obj[i].ta1 || 0);
 			columns[2].push(obj[i].tg1 || 0);
+				columns[3].push(parseFloat(obj[i].t || 0));
+				columns[4].push(parseFloat(obj[i].h || 0));
 			lastAddedTS = timestamp;
 		}
 		chart = c3.generate({
