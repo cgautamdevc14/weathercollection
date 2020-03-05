@@ -72,7 +72,7 @@ app.get("/setValue", function (req, res) {
 	}
   v.time = new Date().getTime();
   db.collection("data").insert(v, function(e,r){
-    res.send(v.toString());
+    res.send(JSON.stringify(v));
   });
 });
 
